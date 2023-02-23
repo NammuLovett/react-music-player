@@ -1,13 +1,25 @@
 import './App.css';
-import {
-  aiFillPlayCircle,
-  aiFillPauseCircle,
-  AiFillPlayCircle,
-} from 'react-icons/ai';
+import { AiFillPlayCircle, AiFillPauseCircle } from 'react-icons/ai';
 import { BiSkipNext, BiSkipPrevious } from 'react-icons/bi';
 import { IconContext } from 'react-icons';
+import { useState } from 'react';
+import { useSound } from 'use-sound';
+import cancion from './assets/joker.mp3';
 
 function App() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [play, { pause, duration, sound }] = useSound(cancion);
+
+  const playingButton = () => {
+    if (isPlaying) {
+      pause();
+      setIsPlaying(false);
+    } else {
+      play();
+      setIsPlaying(true);
+    }
+  };
+
   return (
     <div className='component'>
       <h2>Playing Now</h2>
@@ -17,21 +29,30 @@ function App() {
         alt='Album Cover'
       />
       <div className='titleContainer'>
-        <h3 className='title'>Led Zeppelin</h3>
-        <p className='subTitle'>Whole lotta love</p>
+        <h3 className='title'>Joker</h3>
+        <p className='subTitle'>Ho House Blues</p>
       </div>
 
       <div>
-        <button className='playButton'>
+        <button className='playButton' onClick={playingButton}>
           <IconContext.Provider value={{ size: '3em', color: '#ef5c43' }}>
             <BiSkipPrevious />
           </IconContext.Provider>
         </button>
-        <button className='playButton'>
-          <IconContext.Provider value={{ size: '3em', color: '#ef5c43' }}>
-            <AiFillPlayCircle />
-          </IconContext.Provider>
-        </button>
+
+        {isPlaying ? (
+          <button className='playButton' onClick={playingButton}>
+            <IconContext.Provider value={{ size: '3em', color: '#ef5c43' }}>
+              <AiFillPauseCircle />
+            </IconContext.Provider>
+          </button>
+        ) : (
+          <button className='playButton' onClick={playingButton}>
+            <IconContext.Provider value={{ size: '3em', color: '#ef5c43' }}>
+              <AiFillPlayCircle />
+            </IconContext.Provider>
+          </button>
+        )}
         <button className='playButton'>
           <IconContext.Provider value={{ size: '3em', color: '#ef5c43' }}>
             <BiSkipNext />
